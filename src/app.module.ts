@@ -7,6 +7,8 @@ import { Producto } from 'src/entities/producto.entity';
 import { Pedido } from 'src/entities/pedido.entity';
 import { Categoria } from 'src/entities/categoria.entity';
 import { Pago } from 'src/entities/pago.entity';
+import { DetallePedido } from './entities/detalle_pedido.entity';
+import { Reseña } from './entities/reseñas.entity';
 
 @Module({
   imports: [
@@ -30,6 +32,9 @@ import { Pago } from 'src/entities/pago.entity';
       Pedido,
       Categoria,
       Pago,
+      Pedido,
+      DetallePedido,
+      Reseña,
     ]),
   ],
 })

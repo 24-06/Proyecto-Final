@@ -1,21 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Cliente } from './cliente.entity';
-import { Producto } from './producto.entity';
+// src/pedidos/pedido.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Usuario } from './usuario.entity';
+import { DetallePedido } from './detalle_pedido.entity';
 
-@Entity('pedidos')
+@Entity()
 export class Pedido {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.pedidos)
-  cliente: Cliente;
+  @ManyToOne(() => Usuario, (usuario) => usuario.pedidos)
+  cliente: Usuario;
 
-  @ManyToOne(() => Producto)
-  producto: Producto;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  fecha: Date;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column({ default: 'pendiente' }) // pendiente, enviado, completado
+  estado: string;
+
+  @Column('decimal')
   total: number;
 
-  @Column({ default: 'pendiente' })
-  estado: string;
+  @OneToMany(() => DetallePedido, (detalle) => detalle.pedido)
+  detalles: DetallePedido[];
 }

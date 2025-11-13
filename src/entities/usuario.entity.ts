@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from 'typeorm';
 import { Artesano } from './artesano.entity';
 import { Cliente } from './cliente.entity';
+import { Pedido } from './pedido.entity';
+import { Reseña } from './reseñas.entity';
 
 @Entity('usuarios')
 export class Usuario {
@@ -24,4 +26,10 @@ export class Usuario {
 
   @OneToOne(() => Cliente, (cliente) => cliente.usuario)
   cliente: Cliente;
+
+  @OneToMany(() => Pedido, (pedido) => pedido.cliente)
+  pedidos: Pedido[];
+
+  @OneToMany(() => Reseña, (reseña) => reseña.usuario)
+  reseñas: Reseña[];
 }
