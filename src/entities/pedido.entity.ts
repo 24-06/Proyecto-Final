@@ -12,6 +12,10 @@ export class Pedido {
 
   @ManyToOne(() => Producto)
   producto: Producto;
+  
+
+  @Column('int') 
+  cantidad: number; 
 
   @Column('decimal', { precision: 10, scale: 2 })
   total: number;
