@@ -1,26 +1,15 @@
-import { IsNotEmpty, IsString, IsNumber, MinLength, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductoDto {
-  @IsNotEmpty({ message: 'El nombre es requerido' })
-  @IsString({ message: 'El nombre debe ser un texto' })
-  @MinLength(3, { message: 'El nombre debe tener al menos 3 caracteres' })
+  @ApiProperty({ example: 'Collar artesanal', description: 'Nombre del producto' })
   nombre: string;
 
-  @IsNotEmpty({ message: 'El precio es requerido' })
-  @IsNumber({}, { message: 'El precio debe ser un número válido' })
-  @Min(0, { message: 'El precio debe ser mayor o igual a 0' })
+  @ApiProperty({ example: 10000, description: 'Precio del producto' })
   precio: number;
 
-  @IsNotEmpty({ message: 'La descripción es requerida' })
-  @IsString({ message: 'La descripción debe ser un texto' })
-  @MinLength(10, { message: 'La descripción debe tener al menos 10 caracteres' })
-  descripcion: string;
-
-  @IsNotEmpty({ message: 'El ID del artesano es requerido' })
-  @IsNumber({}, { message: 'El ID del artesano debe ser un número válido' })
-  artesanoId: number;
-
-  @IsNotEmpty({ message: 'El ID de la categoría es requerido' })
-  @IsNumber({}, { message: 'El ID de la categoría debe ser un número válido' })
+  @ApiProperty({ example: 1, description: 'ID de la categoría' })
   categoriaId: number;
+
+  @ApiProperty({ example: 1, description: 'ID del artesano' })
+  artesanoId: number;
 }

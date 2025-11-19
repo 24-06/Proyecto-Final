@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artesano } from 'src/entities/artesano.entity';
@@ -10,70 +10,57 @@ import { UpdateArtesanoDto } from 'src/dtos/update-artesano.dto';
 export class ArtesanosService {
   constructor(
     @InjectRepository(Artesano)
-    private readonly artesanoRepository: Repository<Artesano>,
+    private artesanoRepo: Repository<Artesano>,
+
     @InjectRepository(Usuario)
-    private readonly usuarioRepository: Repository<Usuario>,
+    private usuarioRepo: Repository<Usuario>,
   ) {}
 
+  async create(dto: CreateArtesanoDto) {
+    const usuario = await this.usuarioRepo.findOne({
+      where: { id: dto.usuarioId },
+    });
 
-  async create(createArtesanoDto: CreateArtesanoDto): Promise<Artesano> {
-    const { usuarioId } = createArtesanoDto;
-    
-   
-    const usuario = await this.usuarioRepository.findOneBy({ id: usuarioId });
     if (!usuario) {
-      throw new NotFoundException(`Usuario con ID ${usuarioId} no encontrado.`);
+      throw new NotFoundException('El usuario no existe');
     }
 
-    
-    const existingArtesano = await this.artesanoRepository.findOne({ where: { usuario: { id: usuarioId } } });
-    if (existingArtesano) {
-        throw new ConflictException(`El Usuario ID ${usuarioId} ya está asociado a un perfil de Artesano.`);
-    }
-
-    
-    const artesano = this.artesanoRepository.create({
-      ...createArtesanoDto,
-      usuario: usuario, 
+    const artesano = this.artesanoRepo.create({
+      nombre_taller: dto.nombre_taller,
+      ubicacion: dto.ubicacion,
+      especialidad: dto.especialidad,
+      descripcion: dto.descripcion,
+      usuario,
     });
 
-    return await this.artesanoRepository.save(artesano);
+    return this.artesanoRepo.save(artesano);
   }
 
-
-  async findAll(): Promise<Artesano[]> {
-    return await this.artesanoRepository.find({
-      relations: ['usuario', 'productos'],
-    });
+  findAll() {
+    return this.artesanoRepo.find({ relations: ['usuario', 'productos'] });
   }
 
-  
-  async findOne(id: number): Promise<Artesano> {
-    const artesano = await this.artesanoRepository.findOne({
+  async findOne(id: number) {
+    const artesano = await this.artesanoRepo.findOne({
       where: { id },
       relations: ['usuario', 'productos'],
     });
 
-    if (!artesano) {
-      throw new NotFoundException(`Artesano con ID ${id} no encontrado.`);
-    }
+    if (!artesano) throw new NotFoundException('Artesano no encontrado');
 
     return artesano;
   }
 
+  async update(id: number, dto: UpdateArtesanoDto) {
+    const artesano = await this.findOne(id);
 
-  async update(id: number, updateArtesanoDto: UpdateArtesanoDto): Promise<Artesano> {
-    const artesano = await this.findOne(id); 
-    
-    
-    Object.assign(artesano, updateArtesanoDto);
-    
-    return await this.artesanoRepository.save(artesano);
+    this.artesanoRepo.merge(artesano, dto);
+    return this.artesanoRepo.save(artesano);
   }
 
-
-  async remove(id: number): Promise<void> {
-    const artesano = await this.findOne(id); 
-    await this.artesanoRepository.remove(artesano);
+  async remove(id: number) {
+    const artesano = await this.findOne(id);
+    await this.artesanoRepo.remove(artesano);
+    return { message: 'Artesano eliminado' };
   }
 }

@@ -27,7 +27,7 @@ export class UsuariosService {
     
     const usuario = this.usuarioRepository.create({
       ...createUsuarioDto,
-      contraseña: hashedPassword, 
+      password: hashedPassword, 
     });
     
     return await this.usuarioRepository.save(usuario);
@@ -35,7 +35,7 @@ export class UsuariosService {
 
   async findAll(): Promise<Usuario[]> {
     return await this.usuarioRepository.find({
-      select: ['id', 'nombre', 'email', 'rol'], 
+      select: ['id', 'nombre', 'email', 'role'], 
     });
   }
 
@@ -43,7 +43,7 @@ export class UsuariosService {
     const usuario = await this.usuarioRepository.findOne({
       where: { id },
       relations: ['artesano', 'cliente'],
-      select: ['id', 'nombre', 'email', 'rol'],
+      select: ['id', 'nombre', 'email', 'role'],
     });
 
     if (!usuario) {

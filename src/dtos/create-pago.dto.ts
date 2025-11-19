@@ -1,17 +1,12 @@
-import { IsNotEmpty, IsNumber, IsString, IsIn, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePagoDto {
-  @IsNotEmpty({ message: 'El ID del pedido es requerido' })
-  @IsNumber({}, { message: 'El ID del pedido debe ser un número válido' })
+  @ApiProperty({ example: 1, description: 'ID del pedido' })
   pedidoId: number;
 
-  @IsNotEmpty({ message: 'El monto es requerido' })
-  @IsNumber({}, { message: 'El monto debe ser un número válido' })
-  @Min(0.01, { message: 'El monto debe ser positivo' })
-  monto: number;
+  @ApiProperty({ example: 50000, description: 'Valor pagado' })
+  valor: number;
 
-  @IsNotEmpty({ message: 'El método de pago es requerido' })
-  @IsString({ message: 'El método debe ser un texto' })
-  @IsIn(['tarjeta', 'transferencia', 'efectivo'], { message: 'Método no válido. Use tarjeta, transferencia o efectivo' })
-  metodo: string;
+  @ApiProperty({ example: '2025-11-19', description: 'Fecha del pago' })
+  fecha: string;
 }

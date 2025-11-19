@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Artesano } from './artesano.entity';
 import { Categoria } from './categoria.entity';
+import { Resena } from './resenas.entity';
 
 @Entity('productos')
 export class Producto {
@@ -15,6 +16,9 @@ export class Producto {
 
   @Column()
   descripcion: string;
+
+  @OneToMany(() => Resena, (resena) => resena.producto)
+  resenas: Resena[];
 
   @ManyToOne(() => Artesano, (artesano) => artesano.productos)
   artesano: Artesano;

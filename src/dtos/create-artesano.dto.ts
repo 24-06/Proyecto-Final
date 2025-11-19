@@ -1,16 +1,23 @@
-import { IsNotEmpty, IsString, IsNumber, MinLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateArtesanoDto {
-  @IsNotEmpty({ message: 'El nombre del taller es requerido' })
+
+  @IsNumber()
+  usuarioId?: number;
+
   @IsString()
-  @MinLength(3, { message: 'El nombre del taller debe tener al menos 3 caracteres' })
+  @IsNotEmpty()
   nombre_taller: string;
 
-  @IsNotEmpty({ message: 'La ubicación es requerida' })
   @IsString()
+  @IsNotEmpty()
   ubicacion: string;
 
-  @IsNotEmpty({ message: 'El ID del usuario es requerido' })
-  @IsNumber()
-  usuarioId: number;
+  @IsString()
+  @IsNotEmpty()
+  especialidad?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  descripcion?: string;
 }
