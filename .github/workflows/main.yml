@@ -24,8 +24,8 @@ jobs:
       - name: Build and Push 
         uses: docker/build-push-action@v5
         with:
-          context: ./Proyecto-Final
-          file: ./Proyecto-Final/Dockerfile
+          context: ./proyecto/Proyecto-Final
+          file: ./proyecto/Proyecto-Final/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/raices_cordoba:latest
            
