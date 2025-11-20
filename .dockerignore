@@ -1,0 +1,14 @@
+# Dependencias
+node_modules
+npm-debug.log
+.pnpm-store
+
+# Build artifacts (ya se manejarán con el build stage de Docker)
+dist
+out
+
+# Editores y sistemas operativos
+.git
+.gitignore
+.DS_Store
+*.swp
