@@ -16,6 +16,8 @@ import { Pedido } from 'src/entities/pedido.entity';
 import { Categoria } from 'src/entities/categoria.entity';
 import { Pago } from 'src/entities/pago.entity';
 import { Resena } from './entities/resenas.entity';
+import { DetallePedido } from './entities/detalle-pedido.entity';
+import { MetodoPago } from './entities/metodo-pago.entity';
 
 // módulos
 import { UsuariosModule } from './usuarios/usuarios.module';
@@ -26,17 +28,17 @@ import { CategoriasModule } from './categorias/categorias.module';
 import { PedidosModule } from './pedidos/pedidos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { ResenasModule } from './reseñas/resenas.module';
-
+import { DetallePedidoModule } from './detalle-pedido/detalle-pedido.module';
 
 @Module({
   imports: [
-    // 📌 1. Cargar variables de entorno
+    // 🔌 1. Cargar variables de entorno
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig],
     }),
 
-    // 📌 2. Conectar TypeORM usando las variables del .env
+    // 🔌 2. Conectar TypeORM usando las variables del .env
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -46,13 +48,24 @@ import { ResenasModule } from './reseñas/resenas.module';
         username: config.get('database.username'),
         password: config.get('database.password'),
         database: config.get('database.database'),
-        autoLoadEntities: true,
+        entities: [
+          Usuario,
+          Artesano,
+          Cliente,
+          Producto,
+          Pedido,
+          Categoria,
+          Pago,
+          Resena,
+          DetallePedido,
+          MetodoPago,
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
 
-    // 📌 3. Tus módulos
+    // 🔌 3. Tus módulos
     UsuariosModule,
     ArtesanosModule,
     ClientesModule,
@@ -61,14 +74,7 @@ import { ResenasModule } from './reseñas/resenas.module';
     PedidosModule,
     PagosModule,
     ResenasModule,
-    Usuario,
-    Artesano,
-    Cliente,
-    Producto,
-    Pedido,
-    Categoria,
-    Pago,
-    Resena,
+    DetallePedidoModule,
   ],
   providers: [
     {

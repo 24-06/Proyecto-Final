@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Cliente } from './cliente.entity';
 import { Producto } from './producto.entity';
+import { DetallePedido } from './detalle-pedido.entity';
 
 @Entity('pedidos')
 export class Pedido {
@@ -13,6 +14,8 @@ export class Pedido {
   @ManyToOne(() => Producto)
   producto: Producto;
   
+  @OneToMany(() => DetallePedido, (detalle) => detalle.pedido)
+  detalles: DetallePedido[];
 
   @Column('int') 
   cantidad: number; 
